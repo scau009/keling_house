@@ -1,0 +1,7 @@
+<div>
+    {% for label, messages in app.flashes([flashName]) %}
+        {% for message in messages %}
+            <span class="tips-span">* {{ message }}</span>
+        {% endfor %}
+    {% endfor %}
+</div>

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}登录-{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div style="display: flex;flex-direction: column;height: 100vh;justify-content:center;
+    align-items: center;">
+        <form method="post" style="width: 400px">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱地址</label>
+                <div class="layui-input-block">
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="layui-input" required autofocus>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input  type="password" name="password" id="inputPassword" class="layui-input" required>
+                </div>
+            </div>
+
+
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn">登录</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

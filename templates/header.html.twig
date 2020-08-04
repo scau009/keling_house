@@ -1,0 +1,11 @@
+<div class="layui-header">
+    <div class="layui-logo">{{ app_name }}</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+        {% set path = app.request.pathInfo %}
+        <li class="layui-nav-item {% if path starts with '/clients/' %} layui-this{% endif %}"><a href="{{ path('clients') }}">客户管理</a></li>
+        <li class="layui-nav-item {% if path == '/orders/list' %} layui-this{% endif %}"><a href="{{ path('order_list') }}">送货单管理</a></li>
+        <li class="layui-nav-item {% if path == '/orders/' %} layui-this{% endif %}"><a href="{{ path('create_order') }}">添加送货单</a></li>
+        <li class="layui-nav-item {% if path == '/orders/statistic' %} layui-this{% endif %}"><a href="{{ path('order_statistic') }}">对账/统计</a></li>
+    </ul>
+</div>

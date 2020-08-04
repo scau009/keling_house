@@ -1,0 +1,82 @@
+.flash{
+    padding: 15px;
+    margin-bottom: 10px;
+    line-height: 22px;
+    border-left: 5px solid #009688;
+    border-radius: 0 2px 2px 0;
+    background-color: #f2f2f2;
+}
+.flash-error{
+    border-left: 5px solid #FF5722;
+}
+.flash-warning{
+    border-left: 5px solid #FFB800;
+}
+
+.flash-success{
+    border-left: 5px solid #009688;
+}
+.flash-info {
+    border-left: 5px solid #01AAED;
+}
+
+a {
+    color: #009688;
+}
+
+.tips-span{
+    margin-top: 5px;
+    font-size: 12px;
+    color: #FF5722;
+}
+
+@media screen and (min-width: 1600px)
+{
+    .layui-container {
+        width: 1500px;
+    }
+}
+.layui-pagination {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.layui-pagination span a,.layui-pagination span.current{
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid #009688;
+}
+.layui-pagination span a{
+    color: #009688;
+}
+.layui-pagination span.current{
+    background-color: #009688;
+}
+.pagination{
+    margin-top: 20px;
+    text-align: center;
+}
+.pagination span{
+    display: inline-block;
+    border: 1px solid #009688;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+.pagination span a,.pagination span.current{
+    display: inline-block;
+    padding: 5px 10px;
+    height: 20px;
+    line-height: 20px;
+}
+.pagination span a:hover{
+    background-color: #009688;
+    color: #ffffff;
+}

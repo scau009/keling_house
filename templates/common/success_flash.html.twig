@@ -1,0 +1,7 @@
+<div>
+    {% for label, messages in app.flashes(['success']) %}
+        {% for message in messages %}
+            <blockquote class="layui-elem-quote">{{ message }}</blockquote>
+        {% endfor %}
+    {% endfor %}
+</div>
