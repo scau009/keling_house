@@ -80,3 +80,7 @@ a {
     background-color: #009688;
     color: #ffffff;
 }
+.layui-card-container{
+    padding: 20px;
+    background-color: #F2F2F2
+}

@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        {{ include('common/success_flash.html.twig') }}
+        <div class="layui-card-container">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    编辑修改房屋
+                </div>
+                <div class="layui-card-body">
+                    <form action="{{ path('edit_house',{id:house.id}) }}" method="post" class="layui-form">
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">屋主</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="owner" class="layui-input" required placeholder="请输入屋主" value="{{ house.config.owner }}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">联系方式</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="contactMobile" class="layui-input" required placeholder="请输入联系方式" value="{{ house.config.contactMobile }}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房屋名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" class="layui-input" required placeholder="请输入房屋名称" value="{{ house.name }}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房屋地址</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="address" required class="layui-input" placeholder="请输入房屋地址" value="{{ house.address }}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">水费单价/度</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.waterPrice }}" required name="waterPrice" class="layui-input" placeholder="请输入水费单价（元）" >
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">电费单价/度</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.electricityPrice }}" required name="electricityPrice" class="layui-input" placeholder="请输入电费单价（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">清洁卫生费</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.cleanPrice }}" required name="cleanPrice" class="layui-input" placeholder="请输入清洁、卫生费 （元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">电视费</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.tvPrice }}" required name="tvPrice" class="layui-input" placeholder="请输入电视费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">网络费</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.networkPrice }}" required name="networkPrice" class="layui-input" placeholder="请输入网络费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">管理费</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.managementPrice }}" required name="managementPrice" class="layui-input" placeholder="请输入管理费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">其他费用</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.otherPrice }}" required name="otherPrice" class="layui-input" placeholder="请输入其他（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">钥匙费</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.keyPrice }}" required name="keyPrice" class="layui-input" placeholder="请输入钥匙费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">押金周期</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.depositMonth }}" required name="depositMonth" class="layui-input" placeholder="请输入押金周期">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">个月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">水电损耗</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ house.config.waterAndElectricityLossNumber }}" required name="waterAndElectricityLossNumber" class="layui-input" placeholder="水电损耗度数">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房屋告示与公约</label>
+                            <div class="layui-input-block">
+                                <textarea name="notice" id="" cols="30" rows="10" class="layui-textarea">{{ house.config.notice }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+        });
+    </script>
+{% endblock %}

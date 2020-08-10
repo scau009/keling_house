@@ -4,8 +4,45 @@
 
 {% block body %}
     <div class="layui-container">
-            sdasd
+        {{ include('common/success_flash.html.twig') }}
+        <div class="layui-btn-container">
+            <a class="layui-btn" href="{{ path('create_house') }}">添加房屋</a>
+        </div>
+        <div style="width: 100%">
+            <table id="houseTable" class="layui-table" lay-filter="houseTable">
+                <thead>
+                <tr>
+                    <th>屋主</th>
+                    <th>名称</th>
+                    <th>地址</th>
+                    <th>联系方式</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for house in houses %}
+                    <tr>
+                        <td>{{ house.config.owner }}</td>
+                        <td>{{ house.name }}</td>
+                        <td>{{ house.address }}</td>
+                        <td>{{ house.config.contactMobile }}</td>
+                        <td>
+                            <a class="layui-btn-sm layui-btn" href="{{ path('show_house',{id:house.id}) }}"  data-id="{{ house.id }}">编辑</a>
+                            <form style="display: inline-block" action="{{ path('delete_house',{id:house.id}) }}" method="POST">
+                                <button type="submit" class="layui-btn-sm layui-btn layui-btn-danger" data-id="{{ house.id }}">删除</button>
+                            </form>
+                            <a class="layui-btn-sm layui-btn" href="{{ path('room_list',{id:house.id}) }}"  data-id="{{ house.id }}">房间管理</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {{ knp_pagination_render(houses) }}
+
     </div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -13,7 +50,6 @@
         layui.use(['jquery','layer'], function(){
             var $ = layui.$;
             var layer = layui.layer;
-
         });
     </script>
 {% endblock %}

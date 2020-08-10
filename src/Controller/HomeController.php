@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends BaseController
@@ -13,4 +14,7 @@ class HomeController extends BaseController
     {
         return $this->redirectToRoute('house_list');
     }
+
+
+
 }
