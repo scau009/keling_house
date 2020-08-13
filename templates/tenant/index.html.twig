@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        {{ include('common/success_flash.html.twig') }}
+        <div class="layui-btn-container">
+            <a class="layui-btn" href="{{ path('create_tenant') }}">添加租客</a>
+        </div>
+        <div style="width: 100%">
+            <table id="houseTable" class="layui-table" lay-filter="houseTable">
+                <thead>
+                <tr>
+                    <th>房屋</th>
+                    <th>房间号</th>
+                    <th>真实姓名</th>
+                    <th>手机号码</th>
+                    <th>身份证号码</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tenant in tenants %}
+                    <tr>
+                        <td>
+                            {% for house in tenant.houses %}
+                                <a href="{{ house.id }}">{{ house.name }}</a>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for room in tenant.rooms %}
+                                <a href="{{ room.id }}">{{ room.name }}</a>
+                            {% endfor %}
+                        </td>
+                        <td>{{ tenant.realname }}</td>
+                        <td>{{ tenant.mobile }}</td>
+                        <td>{{ tenant.idNumber }}</td>
+                        <td>{{ tenant.sex|trans_sex}}</td>
+                        <td>
+                            <a href="{{ path('show_tenant',{id:tenant.id}) }}" class="layui-btn layui-btn-sm">管理</a>
+                            <a href="" class="layui-btn layui-btn-sm layui-btn-danger">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {{ knp_pagination_render(tenants) }}
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+        });
+    </script>
+{% endblock %}

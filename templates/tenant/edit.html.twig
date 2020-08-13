@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        <div class="layui-card-container">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    编辑租客信息
+                </div>
+                <div class="layui-card-body">
+                    <form action="{{ path('edit_tenant',{id:tenant.id}) }}" enctype="multipart/form-data" method="post" class="layui-form">
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">真实姓名</label>
+                            <div class="layui-input-block">
+                                <input value="{{ tenant.realname }}" type="text" name="realname" class="layui-input" required placeholder="请输入真实姓名">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">手机号码</label>
+                            <div class="layui-input-block">
+                                <input value="{{ tenant.mobile }}" type="text" name="mobile" class="layui-input" required placeholder="请输入手机号码">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">身份证地址</label>
+                            <div class="layui-input-block">
+                                <input value="{{ tenant.address }}" type="text" name="address" class="layui-input" required placeholder="请输入身份证地址">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">身份证号码</label>
+                            <div class="layui-input-block">
+                                <input value="{{ tenant.idNumber }}" type="text" name="idNumber" class="layui-input" required placeholder="请输入身份证号码">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">性别</label>
+                            <div class="layui-input-block">
+                                <select required name="sex" class="layui-select" id="">
+                                    <option {% if tenant.sex == 1 %}selected{% endif%} value="1">男</option>
+                                    <option {% if tenant.sex == 0 %}selected{% endif%} value="0">女</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">身份证照片</label>
+                            <div class="layui-input-block">
+                                <button type="button" id="upload" class="layui-btn">点击上传</button>
+                                <input type="file" id="idCardImageInput" name="idCardImage" style="display: none" accept="image/gif,image/jpeg,image/jpg,image/png">
+                                <input type="hidden" value="0" id="clickedCancelInput" name="clickedCancel">
+                                <div id="idCardImagePreviewDiv" style="{% if tenant.idCardImage %}display: block;{% else %}display: none{% endif %}">
+                                    <img id="idCardImagePreviewImg" src="{{ asset('/upload/'~tenant.idCardImage) }}" alt="" style="height: 400px;margin-top: 20px;margin-bottom: 20px">
+                                    <button id="cancelIdCardImageBtn" class="layui-btn-sm layui-btn layui-btn-danger" type="button">取消</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+            var reads= new FileReader();
+            var $idCardImage = $("input[name='idCardImage']");
+            var $idCardImagePreviewDiv = $('#idCardImagePreviewDiv');
+            $('#upload').click(function () {
+                $idCardImage.click();
+            });
+            $idCardImage.on('change', function () {
+                if ($(this).val()) {
+                    $idCardImagePreviewDiv.show();
+                    var file= document.getElementById('idCardImageInput').files[0];
+                    reads.readAsDataURL(file);
+                    reads.onload=function (e) {
+                        document.getElementById('idCardImagePreviewImg').src=this.result;
+                    };
+                }else{
+                    $idCardImagePreviewDiv.hide();
+                    document.getElementById('idCardImagePreviewImg').src= '';
+                }
+            });
+            $('#cancelIdCardImageBtn').click(function () {
+                $idCardImage.val('');
+                $idCardImage.change();
+                $('#clickedCancelInput').val(1);
+            });
+        });
+    </script>
+{% endblock %}

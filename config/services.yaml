@@ -38,3 +38,6 @@ services:
         tags:
             - { name: 'request.param_converter', converter: 'doctrine.odm' }
 
+    App\Services\Uploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/upload'

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        {{ include('common/success_flash.html.twig') }}
+        <div class="layui-card-container">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    编辑修改房间
+                </div>
+                <div class="layui-card-body">
+                    <form action="{{ path('edit_room',{id:room.id}) }}" method="post" class="layui-form">
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房间号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" class="layui-input" required placeholder="请输入房间号" value="{{ room.name }}">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">租金</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ room.rent }}" required name="rent" class="layui-input" placeholder="请输入租金（元）" >
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">押金</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ room.deposit }}" required name="deposit" class="layui-input" placeholder="请输入押金（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">当前水表数值</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ room.waterRecord }}" required name="waterRecord" class="layui-input" placeholder="请输入当前水表数值">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">当前电表数值</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="{{ room.electricityRecord }}" required name="electricityRecord" class="layui-input" placeholder="请输入当前电表数值">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">状态</label>
+                            <div class="layui-input-inline">
+                                <select name="status" class="layui-select" id="">
+                                    {% set statusList = getRoomStatus() %}
+                                    {% for status in statusList %}
+                                        <option {% if status == room.status %}selected{% endif%} value="{{ status.value }}">{{ status.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+        });
+    </script>
+{% endblock %}

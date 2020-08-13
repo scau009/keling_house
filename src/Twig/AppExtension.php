@@ -16,6 +16,7 @@ class AppExtension extends AbstractExtension
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('trans_room_status', [$this, 'trans_room_status']),
+            new TwigFilter('trans_sex', [$this, 'trans_sex']),
         ];
     }
 
@@ -36,6 +37,15 @@ class AppExtension extends AbstractExtension
         return $map[$value];
     }
 
+    public function trans_sex($sex)
+    {
+        if ($sex == 1) {
+            return '男';
+        }else{
+            return '女';
+        }
+    }
+
     public function getRoomStatus()
     {
         return [
@@ -44,4 +54,5 @@ class AppExtension extends AbstractExtension
             ['value' => Room::STATUS_CLEANING, 'label' => '清洁中',],
         ];
     }
+
 }

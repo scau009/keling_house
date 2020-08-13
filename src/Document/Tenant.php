@@ -8,13 +8,11 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Field;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceMany;
-use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Tenant
  * @package App\Document
- * @Document()
+ * @Document(repositoryClass="App\Repository\TenantRepository")
  */
 class Tenant
 {
@@ -61,20 +59,23 @@ class Tenant
     private string $idCardImage;
 
     /**
+     * 承租的房间，可有多个
      * @var $room
      * @ReferenceMany(targetDocument="App\Document\Room",mappedBy="tenant")
      */
     private $rooms;
 
     /**
+     * 居住的房间，可以多个
      * @var $livingRoom
-     * @ReferenceOne(targetDocument="App\Document\Room",storeAs="id")
+     * @ReferenceMany(targetDocument="App\Document\Room",mappedBy="residents")
      */
     private $livingRoom;
 
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
+        $this->livingRoom = new ArrayCollection();
     }
 
     /**
@@ -178,7 +179,7 @@ class Tenant
      */
     public function getIdCardImage(): string
     {
-        return $this->idCardImage;
+        return $this->idCardImage ?? '';
     }
 
     /**
@@ -219,5 +220,15 @@ class Tenant
     public function setLivingRoom($livingRoom): void
     {
         $this->livingRoom = $livingRoom;
+    }
+
+    public function getHouses()
+    {
+        $houses = [];
+        /** @var Room $room */
+        foreach ($this->livingRoom as $room) {
+            $houses[] = $room->getHouse();
+        }
+        return $houses;
     }
 }
