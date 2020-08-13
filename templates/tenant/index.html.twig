@@ -26,12 +26,12 @@
                     <tr>
                         <td>
                             {% for house in tenant.houses %}
-                                <a href="{{ house.id }}">{{ house.name }}</a>
+                                <a href="{{ path('show_house',{id:house.id}) }}">{{ house.name }}</a>
                             {% endfor %}
                         </td>
                         <td>
                             {% for room in tenant.rooms %}
-                                <a href="{{ room.id }}">{{ room.name }}</a>
+                                <a href="{{ path('show_room',{id:room.id}) }}">{{ room.name }}</a>
                             {% endfor %}
                         </td>
                         <td>{{ tenant.realname }}</td>

@@ -183,6 +183,7 @@
             var layer = layui.layer;
             var laydate = layui.laydate;
             var $houseSelect = $('#houseSelect');
+            var $roomSelect = $('#roomSelect');
             $houseSelect.change(function () {
                 var $selectedOption = $("#houseSelect option:selected");
                 var houseId = $(this).val();
@@ -191,10 +192,12 @@
                     var options = '';
                     $roomSelect.html('');
                     for (var $i = 0; $i < data.rooms.length; $i++) {
-                        options += "<option value='"+data.rooms[$i].id+"'>"+data.rooms[$i].name+"</option>";
+                        options += "<option value='"+data.rooms[$i].id+"' data-rent='"+data.rooms[$i].rent+"'  data-deposit='"+data.rooms[$i].deposit+"'>"+data.rooms[$i].name+"</option>";
                     }
                     $roomSelect.html(options);
-
+                    if (data.rooms.length > 0) {
+                        $roomSelect.change();
+                    }
                     $("input[name='lessor']").val($selectedOption.data('lessor'));
                     $("input[name='lessorIdCard']").val($selectedOption.data('lessor_idcard'));
                     $("input[name='electricityPrice']").val($selectedOption.data('electricity_price'));
@@ -208,6 +211,12 @@
                     renderForm();
                 });
 
+            });
+            $roomSelect.change(function () {
+                console.error('sdsd');
+                var $roomSelectedOption = $("#roomSelect option:selected");
+                $("input[name='rent']").val($roomSelectedOption.data('rent'));
+                $("input[name='deposit']").val($roomSelectedOption.data('deposit'));
             });
             if ($houseSelect.val()) {
                 $houseSelect.change();

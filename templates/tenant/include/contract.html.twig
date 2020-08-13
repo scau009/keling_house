@@ -2,67 +2,69 @@
     <tbody class="layui-table-body">
     <tr>
         <td width="100px">出租方：</td>
-        <td></td>
+        <td>{{ contract.house.config.owner }}</td>
         <td width="100px">身份证：</td>
-        <td></td>
+        <td>{{ contract.house.config.idCardNumber }}</td>
     </tr>
     <tr>
         <td>承租方：</td>
-        <td></td>
+        <td>{{ contract.tenant.realname }}</td>
         <td>身份证：</td>
-        <td></td>
+        <td>{{ contract.tenant.realname }}</td>
     </tr>
     <tr>
         <td>房屋地址：</td>
-        <td></td>
+        <td>{{ contract.house.address }}</td>
         <td>房间号：</td>
-        <td></td>
+        <td>{{ contract.room.name }}</td>
     </tr>
     <tr>
         <td>租赁期：</td>
-        <td colspan="3"></td>
+        <td colspan="3">
+            {{ contract.beginDay }} 至 {{ contract.finishDay }}
+        </td>
     </tr>
     <tr>
         <td>房屋租金：</td>
-        <td>每月 元</td>
-        <td>押金：</td>
-        <td>元</td>
+        <td>每月 {{ contract.rent }}元</td>
+        <td>押金： </td>
+        <td>{{ contract.deposit }}元</td>
     </tr>
     <tr>
         <td>入住水表底数：</td>
-        <td>度</td>
+        <td>{{ contract.waterRecord }}度</td>
         <td>入住电表底数：</td>
-        <td>度</td>
+        <td>{{ contract.electricityRecord }}度</td>
     </tr>
     <tr>
         <td>水费：</td>
-        <td>元/度</td>
+        <td>{{ contract.waterPrice }}元/度</td>
         <td>电费：</td>
-        <td>元/度</td>
+        <td>{{ contract.electricityPrice }}元/度</td>
     </tr>
     <tr>
         <td>清洁费</td>
-        <td>元/月</td>
+        <td>{{ contract.cleanPrice }}元/月</td>
         <td>电视费</td>
-        <td>元/月</td>
+        <td>{{ contract.tvPrice }}元/月</td>
     </tr>
     <tr>
         <td>网络费</td>
-        <td>元/月</td>
+        <td>{{ contract.networkPrice }}元/月</td>
         <td>管理费</td>
-        <td>元/月</td>
+        <td>{{ contract.managementPrice }}元/月</td>
     </tr>
     <tr>
         <td>其他费用</td>
-        <td>元/月</td>
+        <td>{{ contract.otherPrice }}元/月</td>
         <td>钥匙押金</td>
-        <td>元</td>
+        <td>{{ contract.keyPrice }}元</td>
     </tr>
     <tr>
         <td>合同签订时间：</td>
-        <td></td>
+        <td>{{ contract.createAt|date('Y-m-d H:i:s') }}</td>
         <td>合同状态：</td>
-        <td></td>
+        <td>{{ contract.status }}</td>
     </tr>
     </tbody>
 </table>

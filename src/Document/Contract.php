@@ -15,6 +15,9 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
  */
 class Contract
 {
+    const STATUS_RUNNING = 'running';
+    const STATUS_FINISHED = 'finished';
+
     /**
      * @var
      * @Id()
@@ -461,9 +464,9 @@ class Contract
     /**
      * @return float
      */
-    public function getKeyPrice(): float
+    public function getKeyPrice(): ?float
     {
-        return $this->keyPrice;
+        return $this->keyPrice ?? 0;
     }
 
     /**

@@ -19,7 +19,9 @@
                             </div>
                             <div class="layui-tab-item">
                                 {% if contracts %}
-                                    {{ include('tenant/include/contract.html.twig') }}
+                                    {% for contract in contracts %}
+                                        {{ include('tenant/include/contract.html.twig') }}
+                                    {% endfor %}
                                     <a href="{{ path('create_contract',{tenant:tenant.id}) }}" class="layui-btn layui-btn-sm">签订合同</a>
                                 {% else %}
                                     <a href="{{ path('create_contract',{tenant:tenant.id}) }}" class="layui-btn layui-btn-sm">签订合同</a>

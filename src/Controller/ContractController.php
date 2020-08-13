@@ -9,7 +9,7 @@ use App\Document\House;
 use App\Document\Room;
 use App\Document\Tenant;
 use App\Repository\Builder\ContractQueryBuilder;
-use App\Repository\Builder\RoomQueryBuilder;
+use App\Services\ContractService;
 use App\Services\RoomService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Knp\Component\Pager\PaginatorInterface;
@@ -26,10 +26,13 @@ class ContractController extends BaseController
 {
     private RoomService $roomService;
 
-    public function __construct(DocumentManager $documentManager,RoomService $roomService)
+    private ContractService $contractService;
+
+    public function __construct(DocumentManager $documentManager,RoomService $roomService, ContractService $contractService)
     {
         parent::__construct($documentManager);
         $this->roomService = $roomService;
+        $this->contractService = $contractService;
     }
 
     /**
@@ -65,34 +68,7 @@ class ContractController extends BaseController
             $rooms = $this->roomService->getRoomsCollectionInHouse();
             return $this->render('contract/add.html.twig',['tenant'=>$tenant,'houses'=>$houses,'rooms'=>$rooms]);
         }else{
-            /** @var House $house */
-            $house = $this->documentManager->getRepository(House::class)->find($request->get('houseId'));
-            /** @var Room $room */
-            $room = $this->documentManager->getRepository(Room::class)->find($request->get('roomId'));
-
-            $contract = new Contract();
-            $contract->setHouse($house);
-            $contract->setRoom($room);
-            $contract->setTenant($tenant);
-            $contract->setCreateAt(new \DateTime());
-            $contract->setUpdateAt(new \DateTime());
-            $date = explode(' 至 ' ,$request->get('zulingqi'));
-            $contract->setBeginDay($date[0]);
-            $contract->setFinishDay($date[1]);
-            $contract->setRent($request->get('rent'));
-            $contract->setDeposit($request->get('deposit'));
-            $contract->setWaterRecord($request->get('waterRecord'));
-            $contract->setElectricityRecord($request->get('electricityRecord'));
-            $contract->setWaterPrice($request->get('waterPrice'));
-            $contract->setElectricityPrice($request->get('electricityPrice'));
-            $contract->setCleanPrice($request->get('cleanPrice'));
-            $contract->setTvPrice($request->get('tvPrice'));
-            $contract->setNetworkPrice($request->get('networkPrice'));
-            $contract->setManagementPrice($request->get('managementPrice'));
-            $contract->setOtherPrice($request->get('otherPrice'));
-            $contract->setStatus(Room::STATUS_BUSY);
-            $this->documentManager->persist($contract);
-            $this->documentManager->flush();
+            $this->contractService->createContract($tenant,$request);
             return $this->redirectToRoute('contract_list');
         }
     }

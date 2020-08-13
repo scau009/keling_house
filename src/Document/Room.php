@@ -57,7 +57,7 @@ class Room
      * 住户，可以有多个
      *
      * @var $residents
-     * @ReferenceMany(targetDocument="App\Document\Tenant",mappedBy="livingRoom")
+     * @ReferenceMany(targetDocument="App\Document\Tenant",storeAs="id")
      * @Groups("api")
      */
     private $residents;
@@ -273,7 +273,7 @@ class Room
     {
         $names = '';
         /** @var Tenant $resident */
-        foreach ($this->getResidents() as $resident) {
+        foreach ($d = $this->getResidents() as $resident) {
             $names .= "<a href='' target='_blank'>{$resident->getRealName()}</a>";
         }
         return $names;
