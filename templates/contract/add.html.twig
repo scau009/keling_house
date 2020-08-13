@@ -7,54 +7,156 @@
         <div class="layui-card-container">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    添加房间
+                    签订合同
                 </div>
                 <div class="layui-card-body">
-                    <form action="{{ path('create_room',{id:house.id}) }}" method="post" class="layui-form">
+                    <form action="{{ path('create_contract',{tenant:tenant.id}) }}" method="post" class="layui-form">
                         <div class="layui-form-item">
-                            <label for="" class="layui-form-label">房间号</label>
+                            <label for="" class="layui-form-label">出租方：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" class="layui-input" required placeholder="请输入房间号">
+                                <input type="text" name="lessor" class="layui-input" required placeholder="请输入出租方">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label for="" class="layui-form-label">租金</label>
-                            <div class="layui-input-inline">
-                                <input type="number" step="any" value="300" required name="rent" class="layui-input" placeholder="请输入租金（元）">
+                            <label for="" class="layui-form-label">出租方身份证：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="lessorIdCard" class="layui-input" required placeholder="请输入出租方身份证">
                             </div>
-                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
                         </div>
                         <div class="layui-form-item">
-                            <label for="" class="layui-form-label">押金</label>
+                            <label for="" class="layui-form-label">承租方：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="lessee" readonly class="layui-input" value="{{ tenant.realName }}" required placeholder="请输入承租方">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">承租方身份证：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="lesseeIdCard" readonly class="layui-input" value="{{ tenant.idNumber }}" required placeholder="请输入承租方身份证">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房屋：</label>
                             <div class="layui-input-inline">
-                                <input type="number" step="any" value="300" required name="deposit" class="layui-input" placeholder="请输入押金（元）">
+                                <select name="houseId" id="houseSelect">
+                                    {% for house in houses %}
+                                        <option value="{{ house.id }}"
+                                                data-lessor="{{ house.config.owner }}"
+                                                data-lessor_idcard="{{ house.config.idCardNumber }}"
+                                                data-water_price="{{ house.config.waterPrice }}"
+                                                data-electricity_price="{{ house.config.electricityPrice }}"
+                                                data-clean_price="{{ house.config.cleanPrice }}"
+                                                data-tv_price="{{ house.config.tvPrice }}"
+                                                data-network_price="{{ house.config.networkPrice }}"
+                                                data-management_price="{{ house.config.managementPrice }}"
+                                                data-key_price="{{ house.config.keyPrice }}"
+                                                data-other_price="{{ house.config.otherPrice }}"
+                                        >{{ house.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                没有房屋？<a href="{{ path('create_house') }}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房间号：</label>
+                            <div class="layui-input-inline">
+                                <select name="roomId" id="roomSelect"></select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                只显示可出租的房间。<a href="">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">租赁期：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="zulingqi" id="date" readonly class="layui-input" required placeholder="请选择租赁期">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">租金：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" name="rent" class="layui-input" required placeholder="请输入房间租金">
                             </div>
                             <div class="layui-form-mid layui-word-aux">元</div>
                         </div>
                         <div class="layui-form-item">
-                            <label for="" class="layui-form-label">当前水表数值</label>
+                            <label for="" class="layui-form-label">押金：</label>
                             <div class="layui-input-inline">
-                                <input type="number" step="any" value="0" required name="waterRecord" class="layui-input" placeholder="请输入当前水表数值">
+                                <input type="number" step="any" name="deposit" class="layui-input" required placeholder="请输入房间押金">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">水表底：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" name="waterRecord" class="layui-input" required placeholder="请输入水表底">
                             </div>
                             <div class="layui-form-mid layui-word-aux">度</div>
                         </div>
                         <div class="layui-form-item">
-                            <label for="" class="layui-form-label">当前电表数值</label>
+                            <label for="" class="layui-form-label">电表底：</label>
                             <div class="layui-input-inline">
-                                <input type="number" step="any" value="0" required name="electricityRecord" class="layui-input" placeholder="请输入当前电表数值">
+                                <input type="number" step="any" name="electricityRecord" class="layui-input" required placeholder="请输入水表底">
                             </div>
                             <div class="layui-form-mid layui-word-aux">度</div>
                         </div>
                         <div class="layui-form-item">
-                            <label for="" class="layui-form-label">状态</label>
+                            <label for="" class="layui-form-label">水费：</label>
                             <div class="layui-input-inline">
-                                <select name="status" class="layui-select" id="">
-                                    {% set statusList = getRoomStatus() %}
-                                    {% for status in statusList %}
-                                        <option value="{{ status.value }}">{{ status.label }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="number" step="any" name="waterPrice" class="layui-input" required placeholder="请输入水费">
                             </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">电费：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" name="electricityPrice" class="layui-input" required placeholder="请输入电费">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">清洁费：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="0" required name="cleanPrice" class="layui-input" placeholder="请输入清洁费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">电视费：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="0" required name="tvPrice" class="layui-input" placeholder="请输入电视费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">网络费：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="0" required name="networkPrice" class="layui-input" placeholder="请输入网络费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">管理费：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="0" required name="managementPrice" class="layui-input" placeholder="请输入管理费（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">钥匙押金：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="0" required name="keyPrice" class="layui-input" placeholder="请输入钥匙押金（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">其他费用：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" value="0" required name="otherPrice" class="layui-input" placeholder="请输入其他费用（元）">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">元 / 月</div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
@@ -70,9 +172,51 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        layui.use(['jquery','layer'], function(){
+        function renderForm(){
+            layui.use('form', function(){
+                var form = layui.form;//高版本建议把括号去掉，有的低版本，需要加()
+                form.render();
+            });
+        }
+        layui.use(['jquery','layer','laydate'], function(){
             var $ = layui.$;
             var layer = layui.layer;
+            var laydate = layui.laydate;
+            var $houseSelect = $('#houseSelect');
+            $houseSelect.change(function () {
+                var $selectedOption = $("#houseSelect option:selected");
+                var houseId = $(this).val();
+                $.getJSON('{{ path('api_get_rooms') }}',{houseId:houseId},function (data) {
+                    var $roomSelect = $('#roomSelect');
+                    var options = '';
+                    $roomSelect.html('');
+                    for (var $i = 0; $i < data.rooms.length; $i++) {
+                        options += "<option value='"+data.rooms[$i].id+"'>"+data.rooms[$i].name+"</option>";
+                    }
+                    $roomSelect.html(options);
+
+                    $("input[name='lessor']").val($selectedOption.data('lessor'));
+                    $("input[name='lessorIdCard']").val($selectedOption.data('lessor_idcard'));
+                    $("input[name='electricityPrice']").val($selectedOption.data('electricity_price'));
+                    $("input[name='waterPrice']").val($selectedOption.data('water_price'));
+                    $("input[name='cleanPrice']").val($selectedOption.data('clean_price'));
+                    $("input[name='tvPrice']").val($selectedOption.data('tv_price'));
+                    $("input[name='managementPrice']").val($selectedOption.data('management_price'));
+                    $("input[name='networkPrice']").val($selectedOption.data('network_price'));
+                    $("input[name='keyPrice']").val($selectedOption.data('key_price'));
+                    $("input[name='otherPrice']").val($selectedOption.data('other_price'));
+                    renderForm();
+                });
+
+            });
+            if ($houseSelect.val()) {
+                $houseSelect.change();
+            }
+
+            laydate.render({
+                elem: '#date'
+                ,range: '至' //或 range: '~' 来自定义分割字符
+            });
         });
     </script>
 {% endblock %}

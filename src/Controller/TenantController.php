@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Document\Contract;
 use App\Document\Tenant;
 use App\Services\Uploader;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -10,7 +11,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\UrlHelper;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -41,10 +41,12 @@ class TenantController extends BaseController
 
     /**
      * @Route(path="/{id}",methods={"GET"},name="show_tenant")
-     * @Template(template="tenant/edit.html.twig",vars={"tenant"})
+     * @Template(template="tenant/edit.html.twig")
      */
     public function show(Tenant $tenant)
     {
+        $contracts = $this->documentManager->getRepository(Contract::class)->findBy(['tenant' => $tenant->getId()]);
+        return compact('tenant', 'contracts');
     }
 
     /**

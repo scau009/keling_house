@@ -19,6 +19,12 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
+                            <label for="" class="layui-form-label">身份证</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="idCardNumber" value="{{ house.config.idCardNumber }}" class="layui-input" required placeholder="请输入屋主身份证">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
                             <label for="" class="layui-form-label">联系方式</label>
                             <div class="layui-input-block">
                                 <input type="text" name="contactMobile" class="layui-input" required placeholder="请输入联系方式" value="{{ house.config.contactMobile }}">

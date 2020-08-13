@@ -11,7 +11,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
 /**
  * Class Contract
  * @package App\Document
- * @Document()
+ * @Document(repositoryClass="App\Repository\ContractRepository")
  */
 class Contract
 {
@@ -127,13 +127,6 @@ class Contract
     private float $networkPrice;
 
     /**
-     * 其他费用
-     * @var float
-     * @Field(type="float")
-     */
-    private float $otherPrice;
-
-    /**
      * 管理费
      * @var float
      * @Field(type="float")
@@ -146,6 +139,13 @@ class Contract
      * @Field(type="float")
      */
     private float $keyPrice;
+
+    /**
+     * 其他费用
+     * @var float
+     * @Field(type="float")
+     */
+    private float $otherPrice;
 
     /**
      * 合同状态 running finished

@@ -5,31 +5,26 @@
 {% block body %}
     <div class="layui-container">
         {{ include('common/success_flash.html.twig') }}
-        <div class="layui-btn-container">
-            <a class="layui-btn" href="{{ path('create_room',{id:house.id}) }}">添加房间</a>
-        </div>
         <div style="width: 100%">
             <table id="houseTable" class="layui-table" lay-filter="houseTable">
                 <thead>
                 <tr>
+                    <th>房屋</th>
                     <th>房间号</th>
                     <th>租金</th>
                     <th>承租人</th>
-                    <th>居住人</th>
-                    <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for room in rooms %}
+                {% for contract in contracts %}
                     <tr>
-                        <td>{{ room.name }}</td>
-                        <td>{{ room.rent }}</td>
-                        <td>{{ room.tenant }}</td>
-                        <td>{{ room.residentNames }}</td>
-                        <td>{{ room.status |trans_room_status}}</td>
+                        <td>{{ contract.house.name }}</td>
+                        <td>{{ contract.room.name }}</td>
+                        <td>{{ contract.room.rent }}</td>
+                        <td>{{ contract.tenant.realname }}</td>
                         <td>
-                            <a href="{{ path('show_room',{id:room.id}) }}" class="layui-btn layui-btn-sm">管理</a>
+                            <a href="" class="layui-btn layui-btn-sm">管理</a>
                             <a href="" class="layui-btn layui-btn-sm layui-btn-danger">删除</a>
                         </td>
                     </tr>
@@ -38,7 +33,7 @@
             </table>
         </div>
 
-        {{ knp_pagination_render(rooms) }}
+        {{ knp_pagination_render(contracts) }}
 
     </div>
 

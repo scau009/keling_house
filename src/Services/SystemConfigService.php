@@ -25,6 +25,7 @@ class SystemConfigService
         $config->setOtherPrice($request->get('otherPrice'));
         $config->setWaterAndElectricityLossNumber($request->get('waterAndElectricityLossNumber'));
         $config->setWaterPrice($request->get('waterPrice'));
+        $config->setIdCardNumber($request->get('idCardNumber'));
         return $config;
     }
 }

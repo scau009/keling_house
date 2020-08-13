@@ -9,6 +9,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\Field;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceMany;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class Room
@@ -24,6 +25,7 @@ class Room
     /**
      * @var
      * @Id()
+     * @Groups("api")
      */
     private $id;
 
@@ -31,6 +33,7 @@ class Room
      * 房屋号码名称
      * @var string$name
      * @Field(type="string")
+     * @Groups("api")
      */
     private string $name;
 
@@ -38,6 +41,7 @@ class Room
      * 关联房屋
      * @var House $house
      * @ReferenceOne(targetDocument="App\Document\House",storeAs="id")
+     * @Groups("api")
      */
     private House $house;
 
@@ -45,13 +49,16 @@ class Room
      * 承租人，只能有一个
      * @var Tenant $tenant
      * @ReferenceOne(targetDocument="App\Document\Tenant",storeAs="id")
+     * @Groups("api")
      */
     private ?Tenant $tenant = null;
 
     /**
      * 住户，可以有多个
+     *
      * @var $residents
      * @ReferenceMany(targetDocument="App\Document\Tenant",mappedBy="livingRoom")
+     * @Groups("api")
      */
     private $residents;
 
@@ -59,6 +66,7 @@ class Room
      * 租金、月（基本配置，以租赁合同内的为准）
      * @var float $rent
      * @Field(type="float")
+     * @Groups("api")
      */
     private float $rent;
 
@@ -66,13 +74,16 @@ class Room
      * 押金（基本配置，以租赁合同内的为准）
      * @var float $deposit
      * @Field(type="float")
+     * @Groups("api")
      */
     private float $deposit;
 
     /**
      * 当前水表数值
      * @var float
+     * @Groups("api")
      * @Field(type="float")
+     * @Groups("api")
      */
     private float $waterRecord;
 
@@ -80,6 +91,7 @@ class Room
      * 当前电表数值
      * @var float
      * @Field(type="float")
+     * @Groups("api")
      */
     private float $electricityRecord;
 
@@ -87,15 +99,9 @@ class Room
      * 房间状态 status_open开发出租 status_busy已入住 status_clean待清洁
      * @var string
      * @Field(type="string")
+     * @Groups("api")
      */
     private string $status;
-
-    /**
-     * 当前租赁合同
-     * @var Contract
-     * @ReferenceOne(targetDocument="App\Document\Contract",storeAs="id")
-     */
-    private Contract $contract;
 
     public function __construct()
     {
@@ -261,22 +267,6 @@ class Room
     public function setStatus(string $status): void
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return Contract
-     */
-    public function getContract(): Contract
-    {
-        return $this->contract;
-    }
-
-    /**
-     * @param Contract $contract
-     */
-    public function setContract(Contract $contract): void
-    {
-        $this->contract = $contract;
     }
 
     public function getResidentNames()

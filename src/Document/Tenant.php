@@ -60,7 +60,7 @@ class Tenant
 
     /**
      * 承租的房间，可有多个
-     * @var $room
+     * @var $rooms
      * @ReferenceMany(targetDocument="App\Document\Room",mappedBy="tenant")
      */
     private $rooms;

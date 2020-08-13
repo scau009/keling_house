@@ -5,6 +5,12 @@
         {% set path = app.request.pathInfo %}
         <li class="layui-nav-item {% if path starts with '/house/' %} layui-this{% endif %}"><a href="{{ path('house_list') }}">房屋管理</a></li>
         <li class="layui-nav-item {% if path starts with '/tenant/' %} layui-this{% endif %}"><a href="{{ path('tenant_list') }}">租客管理</a></li>
-        <li class="layui-nav-item {% if path starts with '/contract/' %} layui-this{% endif %}"><a href="{{ path('contract_list') }}">合同管理</a></li>
+        <li class="layui-nav-item {% if path starts with '/contract/' %} layui-this{% endif %}">
+            <a  href="{{ path('contract_template') }}">合同管理</a>
+            <dl class="layui-nav-child">
+                <dd><a href="{{ path('contract_list') }}">全部合同</a></dd>
+                <dd><a href="{{ path('contract_template') }}">合同模板</a></dd>
+            </dl>
+        </li>
     </ul>
 </div>

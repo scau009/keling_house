@@ -7,6 +7,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\Document;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\EmbedOne;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Field;
 use Doctrine\ODM\MongoDB\Mapping\Annotations\Id;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class House
@@ -18,12 +19,14 @@ class House
     /**
      * @var $id
      * @Id()
+     * @Groups("api")
      */
     private $id;
 
     /**
      * @var string $name
      * @Field(type="string")
+     * @Groups("api")
      */
     private string $name;
 

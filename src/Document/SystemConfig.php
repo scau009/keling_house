@@ -92,6 +92,13 @@ class SystemConfig
     private string $owner;
 
     /**
+     * 身份证号码
+     * @var string $idCardNumber
+     * @Field(type="string")
+     */
+    private string $idCardNumber;
+
+    /**
      * @var string
      * @Field(type="string")
      */
@@ -310,5 +317,21 @@ class SystemConfig
     public function setNotice(string $notice): void
     {
         $this->notice = $notice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdCardNumber(): ?string
+    {
+        return $this->idCardNumber ?? '';
+    }
+
+    /**
+     * @param string $idCardNumber
+     */
+    public function setIdCardNumber(string $idCardNumber): void
+    {
+        $this->idCardNumber = $idCardNumber;
     }
 }
