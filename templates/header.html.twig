@@ -3,9 +3,10 @@
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
         {% set path = app.request.pathInfo %}
-        <li class="layui-nav-item {% if path starts with '/house/' %} layui-this{% endif %}"><a href="{{ path('house_list') }}">房屋管理</a></li>
-        <li class="layui-nav-item {% if path starts with '/tenant/' %} layui-this{% endif %}"><a href="{{ path('tenant_list') }}">租客管理</a></li>
-        <li class="layui-nav-item {% if path starts with '/contract/' %} layui-this{% endif %}">
+        <li class="layui-nav-item {% if path starts with '/order' %} layui-this{% endif %}"><a href="{{ path('order_list') }}">账单管理</a></li>
+        <li class="layui-nav-item {% if path starts with '/houses' or path starts with '/room' %} layui-this{% endif %}"><a href="{{ path('house_list') }}">房屋管理</a></li>
+        <li class="layui-nav-item {% if path starts with '/tenant' %} layui-this{% endif %}"><a href="{{ path('tenant_list') }}">租客管理</a></li>
+        <li class="layui-nav-item {% if path starts with '/contract' %} layui-this{% endif %}">
             <a  href="{{ path('contract_template') }}">合同管理</a>
             <dl class="layui-nav-child">
                 <dd><a href="{{ path('contract_list') }}">全部合同</a></dd>

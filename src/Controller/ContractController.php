@@ -6,10 +6,9 @@ namespace App\Controller;
 
 use App\Document\Contract;
 use App\Document\House;
-use App\Document\Room;
 use App\Document\Tenant;
 use App\Repository\Builder\ContractQueryBuilder;
-use App\Services\ContractService;
+use App\Services\Contract\CreateContractService;
 use App\Services\RoomService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Knp\Component\Pager\PaginatorInterface;
@@ -26,9 +25,9 @@ class ContractController extends BaseController
 {
     private RoomService $roomService;
 
-    private ContractService $contractService;
+    private CreateContractService $contractService;
 
-    public function __construct(DocumentManager $documentManager,RoomService $roomService, ContractService $contractService)
+    public function __construct(DocumentManager $documentManager, RoomService $roomService, CreateContractService $contractService)
     {
         parent::__construct($documentManager);
         $this->roomService = $roomService;
@@ -48,14 +47,18 @@ class ContractController extends BaseController
         return compact('contracts');
     }
 
-    public function show()
+    /**
+     * @Route(path="/{id}",methods={"GET"},name="show_contract")
+     * @Template(template="contract/edit.html.twig")
+     */
+    public function show(Contract $contract)
     {
-        
+        return compact('contract');
     }
 
     public function edit()
     {
-        
+
     }
 
     /**
@@ -68,8 +71,13 @@ class ContractController extends BaseController
             $rooms = $this->roomService->getRoomsCollectionInHouse();
             return $this->render('contract/add.html.twig',['tenant'=>$tenant,'houses'=>$houses,'rooms'=>$rooms]);
         }else{
-            $this->contractService->createContract($tenant,$request);
-            return $this->redirectToRoute('contract_list');
+            try {
+                $this->contractService->createContract($tenant,$request);
+                return $this->redirectToRoute('contract_list');
+            } catch (\Exception $exception) {
+                $this->addFlash('errors',$exception->getMessage());
+                return $this->redirectToRoute('create_contract',['tenant'=>$tenant->getId()]);
+            }
         }
     }
 

@@ -278,4 +278,9 @@ class Room
         }
         return $names;
     }
+
+    public function isAvailable()
+    {
+        return $this->getStatus() == self::STATUS_OPEN;
+    }
 }

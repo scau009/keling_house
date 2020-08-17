@@ -6,12 +6,13 @@
     <div class="layui-container">
         {{ include('common/success_flash.html.twig') }}
         <div class="layui-btn-container">
-            <a class="layui-btn" href="{{ path('create_room',{id:house.id}) }}">添加租客</a>
+            <a class="layui-btn" href="{{ path('create_room',{id:house.id}) }}">添加房间</a>
         </div>
         <div style="width: 100%">
             <table id="houseTable" class="layui-table" lay-filter="houseTable">
                 <thead>
                 <tr>
+                    <th>房屋</th>
                     <th>房间号</th>
                     <th>租金</th>
                     <th>承租人</th>
@@ -23,14 +24,22 @@
                 <tbody>
                 {% for room in rooms %}
                     <tr>
+                        <td><a href="{{ path('show_house',{id:room.house.id}) }}">{{ room.house.name }}</a></td>
                         <td>{{ room.name }}</td>
                         <td>{{ room.rent }}</td>
-                        <td>{{ room.tenant.realname }}</td>
-                        <td>{{ room.residentNames }}</td>
+                        <td>{% if room.status == 'busy' %}
+                                <a href="{{ path('show_tenant',{id:room.tenant.id}) }}">{{ room.tenant.realname }}</a>
+                            {% else %}
+                            {% endif %}
+                        </td>
+                        <td>{{ room.residentNames|raw }}</td>
                         <td>{{ room.status |trans_room_status}}</td>
                         <td>
                             <a href="{{ path('show_room',{id:room.id}) }}" class="layui-btn layui-btn-sm">管理</a>
                             <a href="" class="layui-btn layui-btn-sm layui-btn-danger">删除</a>
+                            {% if room.status == 'busy' %}
+                                <a href="{{ path('create_order',{id:room.id}) }}" class="layui-btn layui-btn-sm layui-btn-primary" >计算本月账单</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

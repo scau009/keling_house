@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        <div class="layui-card-container">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    生成账单「 {{ room.house.name }} - {{ room.name}} 」
+                </div>
+                <div class="layui-card-body">
+                    <form action="{{ path('create_order',{id:room.id}) }}" method="post" class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">账单日期</label>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="startDayInput" required readonly name="startDay" value="{{ startDay }}" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">至</div>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="endDayInput" required readonly name="endDay" value="{{ endDay }}"  autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">上月水表：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" readonly disabled value="{{ room.waterRecord }}">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">本月水表：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" name="waterRecord" min="0" class="layui-input" required placeholder="请输入水表">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">上月电表：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" readonly disabled value="{{ room.electricityRecord }}">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">本月电表：</label>
+                            <div class="layui-input-inline">
+                                <input type="number" step="any" min="0" name="electricityRecord" class="layui-input" required placeholder="请输入电表">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">度</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">备注：</label>
+                            <div class="layui-input-block">
+                                <textarea name="remark" id="" cols="30" rows="10" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer','laydate','form'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#startDayInput'
+            });
+            laydate.render({
+                elem: '#endDayInput'
+            });
+        });
+    </script>
+{% endblock %}

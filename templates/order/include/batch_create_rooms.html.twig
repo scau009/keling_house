@@ -1,0 +1,23 @@
+<table class="layui-table">
+    <thead>
+    <tr>
+        <th>房间号</th>
+        <th>上次水表</th>
+        <th>本次水表</th>
+        <th>上次电表</th>
+        <th>本次电表</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for room in rooms %}
+        <tr>
+            <input type="hidden" name="roomId[]" value="{{ room.id }}">
+            <td>{{ room.name }}</td>
+            <td>{{ room.waterRecord }}</td>
+            <td><input type="text" class="layui-input" required name="waterRecord[]"></td>
+            <td>{{ room.electricityRecord }}</td>
+            <td><input type="text" class="layui-input" required name="electricityRecord[]"></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

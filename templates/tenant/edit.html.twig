@@ -4,6 +4,9 @@
 
 {% block body %}
     <div class="layui-container">
+        <div style="margin-bottom: 20px">
+            <a href="{{ path('create_contract',{tenant:tenant.id}) }}" class="layui-btn">签订合同</a>
+        </div>
         <div class="layui-card-container">
             <div class="layui-card">
                 <div class="layui-card-body">
@@ -19,12 +22,9 @@
                             </div>
                             <div class="layui-tab-item">
                                 {% if contracts %}
-                                    {% for contract in contracts %}
-                                        {{ include('tenant/include/contract.html.twig') }}
-                                    {% endfor %}
-                                    <a href="{{ path('create_contract',{tenant:tenant.id}) }}" class="layui-btn layui-btn-sm">签订合同</a>
-                                {% else %}
-                                    <a href="{{ path('create_contract',{tenant:tenant.id}) }}" class="layui-btn layui-btn-sm">签订合同</a>
+                                    {{ include('tenant/include/contractTable.html.twig') }}
+                                    {% else %}
+                                        暂无合同，请 <a href="{{ path('create_contract',{tenant:tenant.id}) }}">签订合同</a>
                                 {% endif %}
                             </div>
                         </div>

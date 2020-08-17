@@ -1,0 +1,24 @@
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>合同编号</th>
+            <th>房屋</th>
+            <th>房间号</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>合同创建时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contract in contracts %}
+        <tr>
+            <td><a href="{{ path('show_contract',{id:contract.id}) }}">{{ contract.id }}</a></td>
+            <td>{{ contract.house.name }}</td>
+            <td>{{ contract.room.name }}</td>
+            <td>{{ contract.beginDay }}</td>
+            <td>{{ contract.finishDay }}</td>
+            <td>{{ contract.createAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        {{ include('common/success_flash.html.twig') }}
+        <div style="width: 100%">
+            <div>
+                <a class="layui-btn" href="{{ path('batch_create_orders') }}">批量生成账单</a>
+            </div>
+            <table id="houseTable" class="layui-table" lay-filter="houseTable">
+                <thead>
+                <tr>
+                    <th>房屋</th>
+                    <th>房间号</th>
+                    <th>金额</th>
+                    <th>账单周期</th>
+                    <th>创建时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td><a href="{{ path('show_house',{id:order.house.id}) }}">{{ order.house.name }}</a></td>
+                        <td><a href="{{ path('show_room',{id:order.room.id}) }}">{{ order.room.name }}</a></td>
+                        <td>{{ order.payment.total }}</td>
+                        <td>{{ order.startDay }}至{{ order.endDay }}</td>
+                        <td>{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ order.status|trans_order_status }}</td>
+                        <td>
+                            <a href="{{ path('show_order',{id:order.id}) }}" class="layui-btn layui-btn-sm">详情</a>
+                            <a href="" class="layui-btn layui-btn-sm layui-btn-danger">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {{ knp_pagination_render(orders) }}
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+        });
+    </script>
+{% endblock %}

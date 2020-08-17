@@ -38,7 +38,7 @@
                         <div class="layui-form-item">
                             <label for="" class="layui-form-label">房屋：</label>
                             <div class="layui-input-inline">
-                                <select name="houseId" id="houseSelect">
+                                <select name="houseId" id="houseSelect" lay-filter="houseSelect">
                                     {% for house in houses %}
                                         <option value="{{ house.id }}"
                                                 data-lessor="{{ house.config.owner }}"
@@ -62,10 +62,10 @@
                         <div class="layui-form-item">
                             <label for="" class="layui-form-label">房间号：</label>
                             <div class="layui-input-inline">
-                                <select name="roomId" id="roomSelect"></select>
+                                <select name="roomId" id="roomSelect" lay-filter="roomSelect"></select>
                             </div>
                             <div class="layui-form-mid layui-word-aux">
-                                只显示可出租的房间。<a href="">立即添加</a>
+                                只显示可出租的房间。如无房间，请<a href="">立即添加</a>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -178,16 +178,17 @@
                 form.render();
             });
         }
-        layui.use(['jquery','layer','laydate'], function(){
+        layui.use(['jquery','layer','laydate','form'], function(){
             var $ = layui.$;
             var layer = layui.layer;
             var laydate = layui.laydate;
             var $houseSelect = $('#houseSelect');
             var $roomSelect = $('#roomSelect');
-            $houseSelect.change(function () {
+            var form = layui.form;
+            form.on('select(houseSelect)', function(selectedData){
                 var $selectedOption = $("#houseSelect option:selected");
-                var houseId = $(this).val();
-                $.getJSON('{{ path('api_get_rooms') }}',{houseId:houseId},function (data) {
+                var houseId = selectedData.value;
+                $.getJSON('{{ path('api_get_rooms') }}',{houseId:houseId,status:"open"},function (data) {
                     var $roomSelect = $('#roomSelect');
                     var options = '';
                     $roomSelect.html('');
@@ -196,7 +197,9 @@
                     }
                     $roomSelect.html(options);
                     if (data.rooms.length > 0) {
-                        $roomSelect.change();
+                        var $roomSelectedOption = $("#roomSelect option:selected");
+                        $("input[name='rent']").val($roomSelectedOption.data('rent'));
+                        $("input[name='deposit']").val($roomSelectedOption.data('deposit'));
                     }
                     $("input[name='lessor']").val($selectedOption.data('lessor'));
                     $("input[name='lessorIdCard']").val($selectedOption.data('lessor_idcard'));
@@ -210,16 +213,14 @@
                     $("input[name='otherPrice']").val($selectedOption.data('other_price'));
                     renderForm();
                 });
-
             });
-            $roomSelect.change(function () {
-                console.error('sdsd');
+            form.on('select(roomSelect)',function (data) {
                 var $roomSelectedOption = $("#roomSelect option:selected");
                 $("input[name='rent']").val($roomSelectedOption.data('rent'));
                 $("input[name='deposit']").val($roomSelectedOption.data('deposit'));
             });
             if ($houseSelect.val()) {
-                $houseSelect.change();
+                $("select[name='houseId']").siblings("div.layui-form-select").find('dl dd[lay-value=' + $houseSelect.val() + ']').click();
             }
 
             laydate.render({

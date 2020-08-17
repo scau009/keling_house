@@ -23,6 +23,7 @@ class RoomController extends BaseController
      */
     public function index(House $house,Request $request,PaginatorInterface $pagination)
     {
+        $request->query->set('houseId', $house->getId());
         $query = $this->documentManager->getRepository(Room::class)->createQueryBuilder()->setByRequest($request);
         $rooms = $pagination->paginate($query, $request->get('page', 1), $request->get('itemPerPage', 20));
         return compact('house','rooms');
@@ -72,7 +73,7 @@ class RoomController extends BaseController
         $room->setStatus($request->get('status'));
         $this->documentManager->persist($room);
         $this->documentManager->flush();
-        return $this->redirectToRoute('show_room',['id'=>$room->getId()]);
+        return $this->redirectToRoute('room_list',['id'=>$room->getHouse()->getId()]);
     }
 
     /**

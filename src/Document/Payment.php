@@ -41,4 +41,73 @@ class Payment
      */
     private float $paid;
 
+    /**
+     * @return float
+     */
+    public function getTotal(): float
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal(float $total): void
+    {
+        $this->total = $total;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOrder(): float
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param float $order
+     */
+    public function setOrder(float $order): void
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLateFree(): float
+    {
+        return $this->lateFree;
+    }
+
+    /**
+     * @param float $lateFree
+     */
+    public function setLateFree(float $lateFree): void
+    {
+        $this->lateFree = $lateFree;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPaid(): ?float
+    {
+        return $this->paid ?? 0;
+    }
+
+    /**
+     * @param float $paid
+     */
+    public function setPaid(float $paid): void
+    {
+        $this->paid = $paid;
+    }
+
+    public function getChineseTotal()
+    {
+        return number2chinese($this->getTotal(), true);
+    }
+
 }

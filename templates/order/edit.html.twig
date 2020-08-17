@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        {{ include('common/success_flash.html.twig') }}
+        <div class="layui-card-container">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    账单明细
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-table">
+                        <tbody class="layui-table-body">
+                        <tr>
+                            <td>房屋地址：</td>
+                            <td>{{ order.house.address }}</td>
+                            <td>房间号：</td>
+                            <td>{{ order.room.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>承租人：</td>
+                            <td><a href="{{ path('show_tenant',{id:order.payer.id}) }}">{{ order.payer.realname }}</a></td>
+                            <td>账单时间：</td>
+                            <td>
+                                {{ order.startDay }} 至 {{ order.endDay }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>房屋租金：</td>
+                            <td colspan="3">{{ order.rent }}元</td>
+                        </tr>
+                        <tr>
+                            <td>水表：</td>
+                            <td>{{ order.waterRecord }}度</td>
+                            <td>电表：</td>
+                            <td>{{ order.electricityRecord }}度</td>
+                        </tr>
+                        <tr>
+                            <td>水费：</td>
+                            <td>{{ order.waterPrice }}元/度，合计：{{ order.WaterPriceCalculator }}</td>
+                            <td>电费：</td>
+                            <td>{{ order.electricityPrice }}元/度，合计：{{ order.ElectricityPriceCalculator }}</td>
+                        </tr>
+                        <tr>
+                            <td>清洁费</td>
+                            <td>{{ order.cleanPrice }}元</td>
+                            <td>电视费</td>
+                            <td>{{ order.tvPrice }}元</td>
+                        </tr>
+                        <tr>
+                            <td>网络费</td>
+                            <td>{{ order.networkPrice }}元</td>
+                            <td>管理费</td>
+                            <td>{{ order.managementPrice }}元</td>
+                        </tr>
+                        <tr>
+                            <td>其他费用</td>
+                            <td colspan="3">{{ order.otherPrice }}元</td>
+                        </tr>
+                        <tr>
+                            <td>创建时间：</td>
+                            <td colspan="3">{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <td>总金额：</td>
+                            <td colspan="2"><b>{{ order.payment.total }}元</b></td>
+                            <td><b>合共：{{ order.payment.chineseTotal }}</b></td>
+                        </tr>
+                        <tr>
+                            <td>账单状态：</td>
+                            <td style="color: #B0413E" colspan="3">{{ order.status|trans_order_status }}</td>
+                        </tr>
+                        <tr>
+                            <td>实际支付：</td>
+                            <td colspan="3">{{ order.payment.paid }}元</td>
+                        </tr>
+                        <tr>
+                            <td>备注：</td>
+                            <td colspan="3">
+                                {{ order.remark }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 20px">
+                        <button id="closeContract" class="layui-btn-sm layui-btn">确认收款</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+            $('#closeContract').click(function () {
+                {#$.post("{{ path('') }}",{},function () {#}
+
+                {#});#}
+            });
+        });
+    </script>
+{% endblock %}

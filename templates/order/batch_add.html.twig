@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app_name }}{% endblock %}
+
+{% block body %}
+    <div class="layui-container">
+        <div class="layui-card-container">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    批量生成账单
+                </div>
+                <div class="layui-card-body">
+                    <form action="{{ path('batch_create_orders') }}" method="post" class="layui-form">
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">房屋：</label>
+                            <div class="layui-input-inline">
+                                <select class="layui-select" name="houseId" id="houseSelect"  lay-filter="houseSelect">
+                                    {% for house in houses %}
+                                        <option value="{{ house.id }}">{{ house.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">没有房屋？请 <a href="{{ path('create_house') }}">立即创建</a></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">账单日期</label>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="startDayInput" required readonly name="startDay" value="{{ startDay }}" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">至</div>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <input type="text" id="endDayInput" required readonly name="endDay" value="{{ endDay }}"  autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="" class="layui-form-label">各房间水电：</label>
+                            <div class="layui-input-block" id="batchCreateRoomsContainer">
+                                {{ include('order/include/batch_create_rooms.html.twig') }}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="submit" class="layui-btn">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        layui.use(['jquery','layer','laydate','form'], function(){
+            var $ = layui.$;
+            var layer = layui.layer;
+            var laydate = layui.laydate;
+            var form = layui.form;
+            laydate.render({
+                elem: '#startDayInput'
+            });
+            laydate.render({
+                elem: '#endDayInput'
+            });
+            form.on('select(houseSelect)',function (data) {
+                $.getJSON("{{ path('api_get_rooms') }}",{houseId:data.value,status:"busy"},function (response) {
+                    if (response.rooms.length <= 0) {
+                        $('#batchCreateRoomsContainer').html('');
+                    }else{
+                        var trs = "";
+                        for (var $i = 0; $i < response.rooms.length; $i++) {
+                            trs += "<tr>\n" +
+                                "            <input type=\"hidden\" name=\"roomId[]\" value='"+response.rooms[$i].id+"'>\n" +
+                                "            <td>"+response.rooms[$i].name+"</td>\n" +
+                                "            <td>"+response.rooms[$i].water_record+"</td>\n" +
+                                "            <td><input type=\"text\" class=\"layui-input\" required name=\"waterRecord[]\"></td>\n" +
+                                "            <td>"+response.rooms[$i].electricity_record+"</td>\n" +
+                                "            <td><input type=\"text\" class=\"layui-input\" required name=\"electricityRecord[]\"></td>\n" +
+                                "        </tr>";
+                        }
+                        var html = "<table class=\"layui-table\">\n" +
+                            "    <thead>\n" +
+                            "    <tr>\n" +
+                            "        <th>房间号</th>\n" +
+                            "        <th>上次水表</th>\n" +
+                            "        <th>本次水表</th>\n" +
+                            "        <th>上次电表</th>\n" +
+                            "        <th>本次电表</th>\n" +
+                            "    </tr>\n" +
+                            "    </thead>\n" +
+                            "    <tbody>\n" +trs+
+                            "    </tbody>\n" +
+                            "</table>";
+                        $('#batchCreateRoomsContainer').html(html);
+                    }
+                });
+            });
+        });
+
+    </script>
+{% endblock %}
