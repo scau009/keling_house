@@ -8,6 +8,7 @@ use App\Document\House;
 use App\Document\Order;
 use App\Document\Room;
 use App\Services\Order\CreateOrderService;
+use App\Services\Order\EditOrderService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -23,10 +24,13 @@ class OrderController extends BaseController
 {
     protected CreateOrderService $createOrderService;
 
-    public function __construct(DocumentManager $documentManager,CreateOrderService $createOrderService)
+    protected EditOrderService $editOrderService;
+
+    public function __construct(DocumentManager $documentManager,CreateOrderService $createOrderService,EditOrderService $editOrderService)
     {
         parent::__construct($documentManager);
         $this->createOrderService = $createOrderService;
+        $this->editOrderService = $editOrderService;
     }
 
     /**
@@ -68,7 +72,7 @@ class OrderController extends BaseController
 
     /**
      * @Route(path="/show/{id}",name="show_order",methods={"GET"})
-     * @Template(template="order/edit.html.twig")
+     * @Template(template="order/show.html.twig")
      */
     public function show(Order $order)
     {
@@ -124,9 +128,23 @@ class OrderController extends BaseController
         }
     }
 
-    public function edit()
+    /**
+     * @Route(path="/edit/{id}",name="edit_order",methods={"GET","POST"})
+     */
+    public function edit(Order $order,Request $request)
     {
-
+        if ($request->isMethod("GET")) {
+            return $this->render('order/edit.html.twig',['order'=>$order]);
+        }else{
+            try {
+                $this->editOrderService->edit($request, $order);
+                $this->addFlash('success','修改成功');
+                return $this->redirectToRoute('show_order', ['id' => $order->getId()]);
+            } catch (\Exception $exception) {
+                $this->addFlash('errors',$exception->getMessage());
+                return $this->redirectToRoute('edit_order', ['id' => $order->getId()]);
+            }
+        }
     }
 
     public function delete()

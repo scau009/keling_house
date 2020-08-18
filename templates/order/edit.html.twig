@@ -11,83 +11,87 @@
                     账单明细
                 </div>
                 <div class="layui-card-body">
-                    <table class="layui-table">
-                        <tbody class="layui-table-body">
-                        <tr>
-                            <td>房屋地址：</td>
-                            <td>{{ order.house.address }}</td>
-                            <td>房间号：</td>
-                            <td>{{ order.room.name }}</td>
-                        </tr>
-                        <tr>
-                            <td>承租人：</td>
-                            <td><a href="{{ path('show_tenant',{id:order.payer.id}) }}">{{ order.payer.realname }}</a></td>
-                            <td>账单时间：</td>
-                            <td>
-                                {{ order.startDay }} 至 {{ order.endDay }}
-                            </td>
+                    <form action="{{ path('edit_order',{id:order.id}) }}" method="post">
+                        <table class="layui-table">
+                            <tbody class="layui-table-body">
+                            <tr>
+                                <td>房屋地址：</td>
+                                <td>{{ order.house.address }}</td>
+                                <td>房间号：</td>
+                                <td>{{ order.room.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>承租人：</td>
+                                <td><a href="{{ path('show_tenant',{id:order.payer.id}) }}">{{ order.payer.realname }}</a></td>
+                                <td>账单时间：</td>
+                                <td>
+                                    <input type="text" name="startDay" value="{{ order.startDay }}" class="layui-input" style="display: inline;width: 200px">
+                                    至
+                                    <input type="text" name="endDay" value="{{ order.endDay }}" class="layui-input" style="display: inline;width: 200px">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>创建时间：</td>
+                                <td colspan="3">{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                            </tr>
+                            <tr>
+                                <td>房屋租金：</td>
+                                <td colspan="3">{{ order.rent }}元</td>
+                            </tr>
+                            <tr>
+                                <td>水表：</td>
+                                <td><input type="number" class="layui-input-inline layui-input" value="{{ order.waterRecord }}" name="waterRecord"></td>
+                                <td>电表：</td>
+                                <td><input type="number" class="layui-input layui-input-inline" value="{{ order.electricityRecord }}" name="electricityRecord"></td>
+                            </tr>
+                            <tr>
+                                <td>水费：</td>
+                                <td>{{ order.waterPrice }}元/度，合计：{{ order.WaterPriceCalculator }}</td>
+                                <td>电费：</td>
+                                <td>{{ order.electricityPrice }}元/度，合计：{{ order.ElectricityPriceCalculator }}</td>
+                            </tr>
+                            <tr>
+                                <td>清洁费</td>
+                                <td>{{ order.cleanPrice }}元</td>
+                                <td>电视费</td>
+                                <td>{{ order.tvPrice }}元</td>
+                            </tr>
+                            <tr>
+                                <td>网络费</td>
+                                <td>{{ order.networkPrice }}元</td>
+                                <td>管理费</td>
+                                <td>{{ order.managementPrice }}元</td>
+                            </tr>
+                            <tr>
+                                <td>其他费用</td>
+                                <td colspan="3"><input type="number" value="{{ order.otherPrice }}" name="otherPrice" class="layui-input"></td>
+                            </tr>
+                            <tr>
+                                <td>备注：</td>
+                                <td colspan="3">
+                                    <input type="text" class="layui-input" name="remark" value="{{ order.remark }}" placeholder="账单备注">
+                                </td>
+                            </tr>
 
-                        </tr>
-                        <tr>
-                            <td>房屋租金：</td>
-                            <td colspan="3">{{ order.rent }}元</td>
-                        </tr>
-                        <tr>
-                            <td>水表：</td>
-                            <td>{{ order.waterRecord }}度</td>
-                            <td>电表：</td>
-                            <td>{{ order.electricityRecord }}度</td>
-                        </tr>
-                        <tr>
-                            <td>水费：</td>
-                            <td>{{ order.waterPrice }}元/度，合计：{{ order.WaterPriceCalculator }}</td>
-                            <td>电费：</td>
-                            <td>{{ order.electricityPrice }}元/度，合计：{{ order.ElectricityPriceCalculator }}</td>
-                        </tr>
-                        <tr>
-                            <td>清洁费</td>
-                            <td>{{ order.cleanPrice }}元</td>
-                            <td>电视费</td>
-                            <td>{{ order.tvPrice }}元</td>
-                        </tr>
-                        <tr>
-                            <td>网络费</td>
-                            <td>{{ order.networkPrice }}元</td>
-                            <td>管理费</td>
-                            <td>{{ order.managementPrice }}元</td>
-                        </tr>
-                        <tr>
-                            <td>其他费用</td>
-                            <td colspan="3">{{ order.otherPrice }}元</td>
-                        </tr>
-                        <tr>
-                            <td>创建时间：</td>
-                            <td colspan="3">{{ order.createAt|date('Y-m-d H:i:s') }}</td>
-                        </tr>
-                        <tr>
-                            <td>总金额：</td>
-                            <td colspan="2"><b>{{ order.payment.total }}元</b></td>
-                            <td><b>合共：{{ order.payment.chineseTotal }}</b></td>
-                        </tr>
-                        <tr>
-                            <td>账单状态：</td>
-                            <td style="color: #B0413E" colspan="3">{{ order.status|trans_order_status }}</td>
-                        </tr>
-                        <tr>
-                            <td>实际支付：</td>
-                            <td colspan="3">{{ order.payment.paid }}元</td>
-                        </tr>
-                        <tr>
-                            <td>备注：</td>
-                            <td colspan="3">
-                                {{ order.remark }}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div style="margin-top: 20px">
-                        <button id="closeContract" class="layui-btn-sm layui-btn">确认收款</button>
-                    </div>
+                            <tr>
+                                <td>总金额：</td>
+                                <td colspan="2"><b>{{ order.payment.total }}元</b></td>
+                                <td><b>合共：{{ order.payment.chineseTotal }}</b></td>
+                            </tr>
+                            <tr>
+                                <td>账单状态：</td>
+                                <td style="color: #B0413E" colspan="3">{{ order.status|trans_order_status }}</td>
+                            </tr>
+                            <tr>
+                                <td>实际支付：</td>
+                                <td colspan="3">{{ order.payment.paid }}元</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 20px">
+                            <button type="submit" class="layui-btn-sm layui-btn">提交</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
