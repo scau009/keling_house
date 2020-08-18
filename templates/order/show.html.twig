@@ -26,7 +26,12 @@
                             <td>
                                 {{ order.startDay }} 至 {{ order.endDay }}
                             </td>
-
+                        </tr>
+                        <tr>
+                            <td>创建时间：</td>
+                            <td>{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                            <td>修改时间：</td>
+                            <td>{{ order.updateAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
                         <tr>
                             <td>房屋租金：</td>
@@ -58,11 +63,15 @@
                         </tr>
                         <tr>
                             <td>其他费用</td>
-                            <td colspan="3">{{ order.otherPrice }}元</td>
+                            <td>{{ order.otherPrice }}元</td>
+                            <td>上月欠款</td>
+                            <td>{{ order.lastMonthPrice }}元</td>
                         </tr>
                         <tr>
-                            <td>创建时间：</td>
-                            <td colspan="3">{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                            <td>备注：</td>
+                            <td colspan="3">
+                                {{ order.remark }}
+                            </td>
                         </tr>
                         <tr>
                             <td>总金额：</td>
@@ -77,17 +86,13 @@
                             <td>实际支付：</td>
                             <td colspan="3">{{ order.payment.paid }}元</td>
                         </tr>
-                        <tr>
-                            <td>备注：</td>
-                            <td colspan="3">
-                                {{ order.remark }}
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                     <div style="margin-top: 20px">
                         <button id="closeContract" class="layui-btn-sm layui-btn">确认收款</button>
-                        <a id="editContract" class="layui-btn-sm layui-btn" href="{{ path('edit_order',{id:order.id}) }}">修改账单</a>
+                        {% if order.status == 'created' %}
+                            <a id="editContract" class="layui-btn-sm layui-btn" href="{{ path('edit_order',{id:order.id}) }}">修改账单</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -97,13 +102,26 @@
 
 {% block javascripts %}
     <script type="text/javascript">
+
         layui.use(['jquery','layer'], function(){
             var $ = layui.$;
             var layer = layui.layer;
             $('#closeContract').click(function () {
-                {#$.post("{{ path('') }}",{},function () {#}
-
-                {#});#}
+                //例子1
+                layer.prompt({
+                    value: {{ order.payment.total }},
+                    title: '请输入收款金额',
+                },function(value, index, elem){
+                    $.post("{{ path('update_payment') }}",{order:"{{ order.id }}",paid:value},function (response) {
+                        if (response.code === 200) {
+                            layer.msg(response.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1000)
+                        }
+                    } );
+                    layer.close(index);
+                });
             });
         });
     </script>

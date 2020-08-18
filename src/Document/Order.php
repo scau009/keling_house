@@ -17,6 +17,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
 class Order
 {
     const STATUS_CREATED = 'created'; //已出单
+    const STATUS_SECTION_PAID = 'section_paid';//部分支付
     const STATUS_PAID = 'paid'; //已支付
 
     /**
@@ -131,6 +132,13 @@ class Order
      * @Field(type="float")
      */
     private float $otherPrice;
+
+    /**
+     * 上个月的盈余费用，如果值>0则说明上个月少交的这个月补上，如果值<0则说明上个月多交了这个月减少
+     * @var float
+     * @Field(type="float")
+     */
+    private float $lastMonthPrice = 0;
 
     /**
      * 管理费
@@ -593,5 +601,21 @@ class Order
     {
         $electricityPrice = round(($this->electricityRecord - $this->lastElectricityRecord + $this->waterAndElectricityLossNumber) * $this->electricityPrice,2);
         return "({$this->electricityRecord} - {$this->lastElectricityRecord} + $this->waterAndElectricityLossNumber) * $this->electricityPrice = {$electricityPrice}元";
+    }
+
+    /**
+     * @return float
+     */
+    public function getLastMonthPrice(): float
+    {
+        return $this->lastMonthPrice;
+    }
+
+    /**
+     * @param float $lastMonthPrice
+     */
+    public function setLastMonthPrice(float $lastMonthPrice): void
+    {
+        $this->lastMonthPrice = $lastMonthPrice;
     }
 }

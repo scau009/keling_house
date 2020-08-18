@@ -32,7 +32,9 @@
                             </tr>
                             <tr>
                                 <td>创建时间：</td>
-                                <td colspan="3">{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                                <td>{{ order.createAt|date('Y-m-d H:i:s') }}</td>
+                                <td>修改时间：</td>
+                                <td>{{ order.updateAt|date('Y-m-d H:i:s') }}</td>
                             </tr>
                             <tr>
                                 <td>房屋租金：</td>
@@ -103,11 +105,6 @@
         layui.use(['jquery','layer'], function(){
             var $ = layui.$;
             var layer = layui.layer;
-            $('#closeContract').click(function () {
-                {#$.post("{{ path('') }}",{},function () {#}
-
-                {#});#}
-            });
         });
     </script>
 {% endblock %}

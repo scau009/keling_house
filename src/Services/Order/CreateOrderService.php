@@ -8,6 +8,7 @@ use App\Document\Contract;
 use App\Document\Order;
 use App\Document\Payment;
 use App\Document\Room;
+use App\Repository\Builder\OrderQueryBuilder;
 use App\Services\BaseService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -38,6 +39,10 @@ class CreateOrderService extends BaseService
         $order->setRemark($remark);
         $order->setStartDay($startDay);
         $order->setEndDay($endDay);
+        $latestOrder = $this->getLatestOrder();
+        if ($latestOrder->getStatus() == Order::STATUS_PAID) {
+            $order->setLastMonthPrice($latestOrder->getPayment()->getTotal() - $latestOrder->getPayment()->getPaid());
+        }
         $payment = new Payment();
         $orderPrice = round($this->getOrderPrice($room, $order, $contract),2);
         $payment->setOrder($orderPrice);
@@ -56,6 +61,13 @@ class CreateOrderService extends BaseService
         return $order;
     }
 
+    private function getLatestOrder(): ?Order
+    {
+        /** @var OrderQueryBuilder $orderQueryBuilder */
+        $orderQueryBuilder = $this->documentManager->getRepository(Order::class)->createQueryBuilder();
+        return $orderQueryBuilder->sort('createAt', -1)->limit(1)->getQuery()->getSingleResult();
+    }
+
     private function getOrderPrice(Room $room, Order $order, Contract $contract)
     {
         $water = $order->getWaterRecord() - $room->getWaterRecord() + $room->getHouse()->getConfig()->getWaterAndElectricityLossNumber();
@@ -68,7 +80,8 @@ class CreateOrderService extends BaseService
             + $order->getManagementPrice()
             + $order->getTvPrice()
             + $order->getCleanPrice()
-            + $order->getOtherPrice();
+            + $order->getOtherPrice()
+            + $order->getLastMonthPrice();
     }
 
     private function getContract(Room $room): Contract

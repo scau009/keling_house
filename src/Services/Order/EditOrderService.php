@@ -6,7 +6,6 @@ namespace App\Services\Order;
 
 use App\Document\Contract;
 use App\Document\Order;
-use App\Document\Room;
 use App\Services\BaseService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -57,7 +56,8 @@ class EditOrderService extends BaseService
             + $order->getManagementPrice()
             + $order->getTvPrice()
             + $order->getCleanPrice()
-            + $order->getOtherPrice();
+            + $order->getOtherPrice()
+            + $order->getLastMonthPrice();
     }
 
     private function check(Request $request, Order $order)
