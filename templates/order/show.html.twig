@@ -89,7 +89,9 @@
                         </tbody>
                     </table>
                     <div style="margin-top: 20px">
-                        <button id="closeContract" class="layui-btn-sm layui-btn">确认收款</button>
+                        {% if order.status in ["created","section_paid"] %}
+                            <button id="closeContract" class="layui-btn-sm layui-btn">确认收款</button>
+                        {% endif %}
                         {% if order.status == 'created' %}
                             <a id="editContract" class="layui-btn-sm layui-btn" href="{{ path('edit_order',{id:order.id}) }}">修改账单</a>
                         {% endif %}
@@ -118,6 +120,8 @@
                             setTimeout(function () {
                                 window.location.reload();
                             },1000)
+                        }else{
+                            layer.msg(response.message);
                         }
                     } );
                     layer.close(index);

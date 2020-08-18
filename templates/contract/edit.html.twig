@@ -81,9 +81,11 @@
                         </tr>
                         </tbody>
                     </table>
+                    {% if contract.status == "running" %}
                     <div style="margin-top: 20px">
-                        <button id="closeContract" class="layui-btn-sm layui-btn">结束合同（退房）</button>
+                        <a id="closeContract" href="javascript:;" data-contract="{{ contract.id }}" class="layui-btn-sm layui-btn">结束合同（退房）</a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -95,10 +97,26 @@
         layui.use(['jquery','layer'], function(){
             var $ = layui.$;
             var layer = layui.layer;
-            $('#closeContract').click(function () {
-                {#$.post("{{ path('') }}",{},function () {#}
 
-                {#});#}
+            $('#closeContract').click(function () {
+                var contract = $(this).data('contract');
+                //询问框
+                layer.confirm('确定结束合同（退房）？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.post("{{ path('close_contract') }}",{contract:contract},function (response) {
+                        if (response.code === 200) {
+                            layer.msg(response.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1500)
+                        }else{
+                            layer.msg(response.message);
+                        }
+                    });
+                }, function(){
+
+                });
             });
         });
     </script>

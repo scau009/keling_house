@@ -167,7 +167,7 @@ class Room
     /**
      * @param Tenant $tenant
      */
-    public function setTenant(Tenant $tenant): void
+    public function setTenant(?Tenant $tenant): void
     {
         $this->tenant = $tenant;
     }

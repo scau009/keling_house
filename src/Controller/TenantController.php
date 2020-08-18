@@ -83,16 +83,6 @@ class TenantController extends BaseController
     }
 
     /**
-     * @Route(path="/delete/{id}",methods={"POST"},name="delete_tenant")
-     */
-    public function delete(Tenant $tenant)
-    {
-        $this->documentManager->remove($tenant);
-        $this->documentManager->flush();
-        return $this->redirectToRoute('tenant_list');
-    }
-
-    /**
      * @Route(path="/",methods={"POST","GET"},name="create_tenant")
      */
     public function create(Request $request)

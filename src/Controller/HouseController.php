@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Document\House;
+use App\Document\Room;
 use App\Services\SystemConfigService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Knp\Component\Pager\PaginatorInterface;
@@ -91,6 +92,11 @@ class HouseController extends BaseController
      */
     public function deleteHouse(House $house)
     {
+        $rooms = $this->documentManager->getRepository(Room::class)->findBy(['house' => $house->getId()]);
+        if (!empty($rooms)) {
+            $this->addFlash('errors','此房屋内含房间，请先删除房间！');
+            return $this->redirectToRoute('house_list');
+        }
         $this->documentManager->remove($house);
         $this->documentManager->flush();
         $this->addFlash('success','删除成功！');

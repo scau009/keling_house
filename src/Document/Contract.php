@@ -15,8 +15,9 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations\ReferenceOne;
  */
 class Contract
 {
-    const STATUS_RUNNING = 'running';
-    const STATUS_FINISHED = 'finished';
+    const STATUS_RUNNING = 'running'; //履行中，进行中
+    const STATUS_PENDING_LIQUIDATION = 'pending';//待清算
+    const STATUS_FINISHED = 'finished'; //已结束
 
     /**
      * @var
@@ -37,6 +38,7 @@ class Contract
     private Room $room;
 
     /**
+     * 承租人
      * @var Tenant $tenant
      * @ReferenceOne(targetDocument="App\Document\Tenant",storeAs="id")
      */

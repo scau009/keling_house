@@ -7,14 +7,64 @@
         {{ include('common/success_flash.html.twig') }}
         <div style="width: 100%">
             <div>
-                <a class="layui-btn" href="{{ path('batch_create_orders') }}">批量生成账单</a>
+                <form class="layui-form" action="{{ path('order_list') }}">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-mid">订单号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="orderId" class="layui-input" placeholder="订单号" value="{{ app.request.get('orderId') }}">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-mid">房屋</label>
+                            <div class="layui-input-inline">
+                                <select name="houseId" id="houseSelect" lay-filter="houseSelect">
+                                    <option value="">不限</option>
+                                    {% for house in houses  %}
+                                        <option {% if app.request.get('houseId') == house.id %}selected{% endif %}  value="{{ house.id }}">{{ house.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-mid">房间</label>
+                            <div class="layui-input-inline">
+                                <select name="roomId" id="roomSelect">
+                                    <option value="">不限</option>
+                                    {% for room in rooms  %}
+                                        <option {% if app.request.get('roomId') == room.id %}selected{% endif %} value="{{ room.id }}">{{ room.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-mid">账单状态</label>
+                            <div class="layui-input-inline">
+                                <select name="status" id="">
+                                    <option value="">不限</option>
+                                    <option {% if app.request.get('status') == 'created' %}selected{% endif %} value="created">{{ 'created'|trans_order_status }}</option>
+                                    <option {% if app.request.get('status') == 'section_paid' %}selected{% endif %} value="section_paid">{{ 'section_paid'|trans_order_status }}</option>
+                                    <option {% if app.request.get('status') == 'paid' %}selected{% endif %} value="paid">{{ 'paid'|trans_order_status }}</option>
+                                    <option {% if app.request.get('status') == 'deleted' %}selected{% endif %} value="deleted">{{ 'deleted'|trans_order_status }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <div class="layui-input-inline">
+                                <button class="layui-btn layui-btn-sm" type="submit">搜索</button>
+                                <a class="layui-btn layui-btn-sm" href="{{ path('batch_create_orders') }}">批量生成账单</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <table id="houseTable" class="layui-table" lay-filter="houseTable">
                 <thead>
                 <tr>
                     <th>房屋</th>
                     <th>房间号</th>
-                    <th>金额</th>
+                    <th>账单金额</th>
+                    <th>实收金额</th>
                     <th>账单周期</th>
                     <th>创建时间</th>
                     <th>状态</th>
@@ -27,12 +77,19 @@
                         <td><a href="{{ path('show_house',{id:order.house.id}) }}">{{ order.house.name }}</a></td>
                         <td><a href="{{ path('show_room',{id:order.room.id}) }}">{{ order.room.name }}</a></td>
                         <td>{{ order.payment.total }}</td>
+                        <td>{{ order.payment.paid }}</td>
                         <td>{{ order.startDay }}至{{ order.endDay }}</td>
                         <td>{{ order.createAt|date('Y-m-d H:i:s') }}</td>
-                        <td>{{ order.status|trans_order_status }}</td>
+                        <td>
+                            {% if order.status == 'created' %}
+                            <span class="layui-badge">{{ order.status|trans_order_status }}</span>
+                                {% else %}
+                                    <span class="layui-badge layui-bg-green">{{ order.status|trans_order_status }}</span>
+                            {% endif %}
+                        </td>
                         <td>
                             <a href="{{ path('show_order',{id:order.id}) }}" class="layui-btn layui-btn-sm">详情</a>
-                            <a href="" class="layui-btn layui-btn-sm layui-btn-danger">删除</a>
+                            <button class="layui-btn layui-btn-sm layui-btn-danger delete" data-order="{{ order.id }}">删除</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -51,6 +108,48 @@
         layui.use(['jquery','layer'], function(){
             var $ = layui.$;
             var layer = layui.layer;
+            var form = layui.form;
+            var $roomSelect = $('#roomSelect');
+
+            form.on('select(houseSelect)', function(selectedData){
+                var houseId = selectedData.value;
+                if (houseId) {
+                    $.getJSON('{{ path('api_get_rooms') }}',{houseId:houseId,status:"open"},function (data) {
+                        var options = "<option value=''>不限</option>";
+                        $roomSelect.html('');
+                        for (var $i = 0; $i < data.rooms.length; $i++) {
+                            options += "<option value='"+data.rooms[$i].id+"' >"+data.rooms[$i].name+"</option>";
+                        }
+                        $roomSelect.html(options);
+                        form.render();
+                    });
+                }else{
+                    var options = "<option value=''>不限</option>";
+                    $roomSelect.html(options);
+                    form.render();
+                }
+            });
+
+            $('.delete').click(function () {
+                var order = $(this).data('order');
+                //询问框
+                layer.confirm('确定删除此账单？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.post("{{ path('delete_order') }}",{order:order},function (response) {
+                        if (response.code === 200) {
+                            layer.msg(response.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1500)
+                        }else{
+                            layer.msg(response.message);
+                        }
+                    });
+                }, function(){
+
+                });
+            });
         });
     </script>
 {% endblock %}

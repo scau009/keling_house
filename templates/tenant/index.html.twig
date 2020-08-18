@@ -40,7 +40,7 @@
                         <td>{{ tenant.sex|trans_sex}}</td>
                         <td>
                             <a href="{{ path('show_tenant',{id:tenant.id}) }}" class="layui-btn layui-btn-sm">管理</a>
-                            <a href="" class="layui-btn layui-btn-sm layui-btn-danger">删除</a>
+                            <a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger delete" data-tenant="{{ tenant.id }}">删除</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -59,6 +59,26 @@
         layui.use(['jquery','layer'], function(){
             var $ = layui.$;
             var layer = layui.layer;
+            $('.delete').click(function () {
+                var tenant = $(this).data('tenant');
+                //询问框
+                layer.confirm('确定删除此租客？', {
+                    btn: ['确定','取消'] //按钮
+                }, function(){
+                    $.post("{{ path('delete_tenant') }}",{tenant:tenant},function (response) {
+                        if (response.code === 200) {
+                            layer.msg(response.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1500)
+                        }else{
+                            layer.msg(response.message);
+                        }
+                    });
+                }, function(){
+
+                });
+            });
         });
     </script>
 {% endblock %}

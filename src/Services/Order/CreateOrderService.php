@@ -40,7 +40,7 @@ class CreateOrderService extends BaseService
         $order->setStartDay($startDay);
         $order->setEndDay($endDay);
         $latestOrder = $this->getLatestOrder();
-        if ($latestOrder->getStatus() == Order::STATUS_PAID) {
+        if ($latestOrder && $latestOrder->getStatus() == Order::STATUS_PAID) {
             $order->setLastMonthPrice($latestOrder->getPayment()->getTotal() - $latestOrder->getPayment()->getPaid());
         }
         $payment = new Payment();

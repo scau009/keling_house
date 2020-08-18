@@ -172,12 +172,6 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        function renderForm(){
-            layui.use('form', function(){
-                var form = layui.form;//高版本建议把括号去掉，有的低版本，需要加()
-                form.render();
-            });
-        }
         layui.use(['jquery','layer','laydate','form'], function(){
             var $ = layui.$;
             var layer = layui.layer;
@@ -189,7 +183,6 @@
                 var $selectedOption = $("#houseSelect option:selected");
                 var houseId = selectedData.value;
                 $.getJSON('{{ path('api_get_rooms') }}',{houseId:houseId,status:"open"},function (data) {
-                    var $roomSelect = $('#roomSelect');
                     var options = '';
                     $roomSelect.html('');
                     for (var $i = 0; $i < data.rooms.length; $i++) {
@@ -211,7 +204,7 @@
                     $("input[name='networkPrice']").val($selectedOption.data('network_price'));
                     $("input[name='keyPrice']").val($selectedOption.data('key_price'));
                     $("input[name='otherPrice']").val($selectedOption.data('other_price'));
-                    renderForm();
+                    form.render();
                 });
             });
             form.on('select(roomSelect)',function (data) {

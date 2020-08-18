@@ -19,6 +19,7 @@ class Order
     const STATUS_CREATED = 'created'; //已出单
     const STATUS_SECTION_PAID = 'section_paid';//部分支付
     const STATUS_PAID = 'paid'; //已支付
+    const STATUS_DELETED = 'deleted'; //已作废
 
     /**
      * @var $id

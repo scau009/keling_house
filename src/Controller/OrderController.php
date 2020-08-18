@@ -41,7 +41,18 @@ class OrderController extends BaseController
     {
         $query = $this->documentManager->getRepository(Order::class)->createQueryBuilder()->setByRequest($request);
         $orders = $pagination->paginate($query, $request->get('page', 1), $request->get('itemPerPage', 20));
-        return compact('orders');
+        $houses = $this->documentManager->getRepository(House::class)->findAll();
+        $houseId = $request->get('houseId');
+        if (!empty($houseId)) {
+            $rooms = $this->documentManager->getRepository(Room::class)->findBy(['house'=>$houseId]);
+        }else if (!empty($houses) && empty($houseId)) {
+            /** @var House $house */
+            $house = $houses[0];
+            $rooms = $this->documentManager->getRepository(Room::class)->findBy(['house'=>$house->getId()]);
+        }else{
+            $rooms = [];
+        }
+        return compact('orders','houses','rooms');
     }
 
     /**
@@ -145,10 +156,5 @@ class OrderController extends BaseController
                 return $this->redirectToRoute('edit_order', ['id' => $order->getId()]);
             }
         }
-    }
-
-    public function delete()
-    {
-
     }
 }

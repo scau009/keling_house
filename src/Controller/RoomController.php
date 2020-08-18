@@ -75,15 +75,4 @@ class RoomController extends BaseController
         $this->documentManager->flush();
         return $this->redirectToRoute('room_list',['id'=>$room->getHouse()->getId()]);
     }
-
-    /**
-     * @Route(path="/delete/{id}",name="delete_room",methods={"POST"})
-     */
-    public function deleteRoom(Room $room)
-    {
-        $this->documentManager->remove($room);
-        $this->documentManager->flush();
-        $this->addFlash('success','删除成功！');
-        return $this->redirectToRoute('room_list');
-    }
 }

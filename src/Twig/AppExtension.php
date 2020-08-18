@@ -46,6 +46,7 @@ class AppExtension extends AbstractExtension
         $map = [
             Contract::STATUS_RUNNING => '进行中',
             Contract::STATUS_FINISHED => '已完成',
+            Contract::STATUS_PENDING_LIQUIDATION => '待清算',
         ];
         return $map[$value];
     }
@@ -55,6 +56,8 @@ class AppExtension extends AbstractExtension
         $map = [
             Order::STATUS_CREATED => '已出单',
             Order::STATUS_PAID => '已支付',
+            Order::STATUS_SECTION_PAID => '部分支付',
+            Order::STATUS_DELETED => '已作废',
         ];
         return $map[$value];
     }

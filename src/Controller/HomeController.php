@@ -12,9 +12,6 @@ class HomeController extends BaseController
      */
     public function index()
     {
-        return $this->redirectToRoute('house_list');
+        return $this->redirectToRoute('order_list');
     }
-
-
-
 }

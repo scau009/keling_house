@@ -8,11 +8,13 @@ use App\Document\Contract;
 use App\Document\House;
 use App\Document\Tenant;
 use App\Repository\Builder\ContractQueryBuilder;
+use App\Services\Contract\CloseContractService;
 use App\Services\Contract\CreateContractService;
 use App\Services\RoomService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -27,11 +29,14 @@ class ContractController extends BaseController
 
     private CreateContractService $contractService;
 
-    public function __construct(DocumentManager $documentManager, RoomService $roomService, CreateContractService $contractService)
+    private CloseContractService $closeContractService;
+
+    public function __construct(DocumentManager $documentManager, RoomService $roomService, CreateContractService $contractService,CloseContractService $closeContractService)
     {
         parent::__construct($documentManager);
         $this->roomService = $roomService;
         $this->contractService = $contractService;
+        $this->closeContractService = $closeContractService;
     }
 
     /**
@@ -56,11 +61,6 @@ class ContractController extends BaseController
         return compact('contract');
     }
 
-    public function edit()
-    {
-
-    }
-
     /**
      * @Route(path="?tenant={tenant}",name="create_contract",methods={"GET","POST"})
      */
@@ -79,11 +79,6 @@ class ContractController extends BaseController
                 return $this->redirectToRoute('create_contract',['tenant'=>$tenant->getId()]);
             }
         }
-    }
-
-    public function delete()
-    {
-        
     }
 
     /**
