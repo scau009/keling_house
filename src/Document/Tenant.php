@@ -72,6 +72,12 @@ class Tenant
      */
     private $livingRoom;
 
+    /**
+     * @var string $status
+     * @Field(type="string")
+     */
+    private $status = 'active';
+
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
@@ -234,4 +240,21 @@ class Tenant
         }
         return $houses;
     }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
+
 }

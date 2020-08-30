@@ -17,6 +17,17 @@ class TenantQueryBuilder extends Builder
 
     public function setByRequest(Request $request)
     {
+        if ($status = $request->get('status')) {
+            $this->setStatus($status);
+        }else{
+            $this->field('status')->notEqual('deleted');
+        }
+        return $this;
+    }
+
+    public function setStatus(string $status)
+    {
+        $this->field('status')->equals($status);
         return $this;
     }
 }

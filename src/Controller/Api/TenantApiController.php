@@ -29,7 +29,8 @@ class TenantApiController extends BaseApiController
                 'data'=>'',
                 'message'=>'此租客关联了房间或房屋，请先解绑！']);
         }
-        $this->documentManager->remove($tenant);
+        $tenant->setStatus('deleted');
+        $this->documentManager->persist($tenant);
         $this->documentManager->flush();
         return new JsonResponse([
             'code'=> 200,
