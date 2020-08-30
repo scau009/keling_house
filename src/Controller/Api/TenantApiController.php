@@ -21,8 +21,9 @@ class TenantApiController extends BaseApiController
      */
     public function delete(Request $request)
     {
+        /** @var Tenant $tenant */
         $tenant = $this->documentManager->getRepository(Tenant::class)->find($request->get('tenant'));
-        if ($tenant->getHouses() || $tenant->getRooms()) {
+        if (!empty($tenant->getHouses()) || count($tenant->getRooms()->toArray()) != 0) {
             return new JsonResponse([
                 'code'=> 400,
                 'data'=>'',

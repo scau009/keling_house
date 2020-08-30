@@ -225,6 +225,9 @@ class Tenant
     public function getHouses()
     {
         $houses = [];
+        if (empty($this->livingRoom->toArray())) {
+            return [];
+        }
         /** @var Room $room */
         foreach ($this->livingRoom as $room) {
             $houses[] = $room->getHouse();
