@@ -3,15 +3,21 @@
 {% block title %}{{ app_name }}{% endblock %}
 
 {% block body %}
+    <style>
+        .layui-table td{
+            font-size: 24px;!important;
+            line-height: 32px;
+        }
+    </style>
     <div class="layui-container">
         {{ include('common/success_flash.html.twig') }}
         <div class="layui-card-container">
-            <div class="layui-card">
+            <div class="layui-card" >
                 <div class="layui-card-header">
                     账单明细
                 </div>
                 <div class="layui-card-body">
-                    <table class="layui-table">
+                    <table class="layui-table" >
                         <tbody class="layui-table-body">
                         <tr>
                             <td>房屋地址：</td>
@@ -75,7 +81,7 @@
                         </tr>
                         <tr>
                             <td>总金额：</td>
-                            <td colspan="2"><b>{{ order.payment.total }}元</b></td>
+                            <td colspan="2"><b style="font-size: 36px">{{ order.payment.total }}元</b></td>
                             <td><b>合共：{{ order.payment.chineseTotal }}</b></td>
                         </tr>
                         <tr>

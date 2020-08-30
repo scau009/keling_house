@@ -52,7 +52,7 @@
                                 <select name="status" class="layui-select" id="">
                                     {% set statusList = getRoomStatus() %}
                                     {% for status in statusList %}
-                                        <option {% if status == room.status %}selected{% endif%} value="{{ status.value }}">{{ status.label }}</option>
+                                        <option {% if status.value == room.status %}selected{% endif%} value="{{ status.value }}">{{ status.label }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
